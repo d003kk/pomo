@@ -72,10 +72,38 @@ void handle_timeout(const boost::system::error_code&)
   std::cout << "handle_timeout\n";
 }
 
+using namespace boost::chrono;
+using namespace std;
+
+template< class Clock >
+class timer
+{
+  typename Clock::time_point start;
+public:
+  timer() : start( Clock::now() ) {}
+  typename Clock::duration elapsed() const
+  {
+    return Clock::now() - start;
+  }
+  long int seconds() const
+  {
+    return round<boost::chrono::seconds>(elapsed() ).count();
+  }
+};
+
+
 int main()
 {
+
+ timer<system_clock> t1;	
+ while(1) {
+
+	 cout<<t1.seconds()<<endl;
+	 
+ }
   try
   {
+    time_t_clock::duration zero_duration();
     boost::asio::io_service io_service;
 
     time_t_timer timer(io_service);
@@ -84,10 +112,13 @@ int main()
     std::cout << "Starting synchronous wait\n";
     timer.wait();
     std::cout << "Finished synchronous wait\n";
+	    
 
     timer.expires_from_now(time_t_clock::duration(5));
     std::cout << "Starting asynchronous wait\n";
     timer.async_wait(&handle_timeout);
+    while(1)
+	std::cout<<time_t_wait_traits::to_wait_duration(timer.expires_from_now())<<std::endl;
     io_service.run();
     std::cout << "Finished asynchronous wait\n";
   }
@@ -95,6 +126,7 @@ int main()
   {
     std::cout << "Exception: " << e.what() << "\n";
   }
+
 
   return 0;
 }
