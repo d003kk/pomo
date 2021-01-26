@@ -92,7 +92,7 @@ public:
 };
 
 
-int main()
+void do_stuff()
 {
 
  timer<system_clock> t1;	
@@ -128,5 +128,4 @@ int main()
   }
 
 
-  return 0;
 }
