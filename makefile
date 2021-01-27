@@ -1,6 +1,6 @@
 PROG = pomo
 CC = /usr/bin/g++
-CPPFLAGS = -std=c++14 -I.
+CPPFLAGS = -std=c++14 -I. -pthread
 LDFLAGS = -L/usr/local/lib -lboost_chrono -lboost_system
 OBJS = timer.o main.o
 

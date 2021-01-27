@@ -1,7 +1,17 @@
 #include "timer.h"
+#include<thread>
+#include<iostream>
+using namespace std;
+
+void monkey()
+{
+	//cout<<"Monkey"<<endl;
+	
+}
 
 int main()
 {
-	do_stuff();
+	thread timer_thread(do_stuff);
+	timer_thread.join();
 	return 0;
 }
