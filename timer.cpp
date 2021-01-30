@@ -1,4 +1,5 @@
 #define BOOST_CHRONO_HAS_CLOCK_STEADY 1
+#define BOOST_CHRONO_EXTENSIONS 1
 
 #include <boost/chrono.hpp>
 #include <boost/asio.hpp>
@@ -17,6 +18,8 @@ public:
   timer()
   : start( Clock::now() )
   , stopped(false)
+  , stopped_time() // Default ctor create timepoint at zero.
+  , zero() // Default ctor create timepoint at zero.
   {}
   typename Clock::duration elapsed() const
   {
@@ -24,24 +27,33 @@ public:
   }
   long int display() const
   {
-    return round<boost::chrono::seconds>(elapsed() ).count();
+	  if(stopped){
+    	  	return round<boost::chrono::seconds>(stopped_time - start ).count();
+	  }	  
+    	  return round<boost::chrono::seconds>(elapsed() ).count();
   }
   void  reset()
   {
   	start = Clock::now();
+  	stopped = false; 
+	stopped_time = zero;
   }
   void  stop()
   {
   	stopped = true; 
+  	stopped_time = Clock::now();
   }
   void  restart()
   {
   	stopped = false; 
+	start += Clock::now() - stopped_time;
+	stopped_time = zero;
   }
 private:
   bool stopped;
   typename Clock::time_point start;
   typename Clock::time_point stopped_time;
+  typename Clock::time_point zero;
 };
 
 enum{
